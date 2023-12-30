@@ -24,6 +24,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:8090/auth/login', formData);
       console.log('Login successful:', response.data);
 
+      window.location.href = '/organizations';
       // Add any further actions after successful login
 
     } catch (error) {
