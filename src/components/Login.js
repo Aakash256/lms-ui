@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 import "./Home.css";
 
 const Login = () => {
@@ -8,6 +9,8 @@ const Login = () => {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -24,7 +27,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:8090/auth/login', formData);
       console.log('Login successful:', response.data);
 
-      window.location.href = '/organizations';
+      navigate('/organizations',{state: { accessToken: response.data.accessToken }});
       // Add any further actions after successful login
 
     } catch (error) {

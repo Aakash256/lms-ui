@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
+import {useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 const OrgHome = () => {
   const [organizations, setOrganizations] = useState([]);
+  const location = useLocation();
+
+  
 
   useEffect(() => {
     // Fetch organizations data from an API or other data source
@@ -27,6 +32,27 @@ const OrgHome = () => {
     ];
 
     setOrganizations(sampleOrganizations);
+
+    const fetchUserMe = async () => {
+    try {
+        const accessToken = location.state?.accessToken;
+        const response = await axios.get('http://localhost:8090/v1/user/me', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken, // Replace YOUR_ACCESS_TOKEN with the actual token
+          },
+        });
+        console.log('User data:', response.data);
+
+        const user = response.data;
+        console.log('user id', user?.id);
+        // Handle the response data as needed
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Handle errors
+      }
+    }
+
+    fetchUserMe();
   }, []);
 
   return (
