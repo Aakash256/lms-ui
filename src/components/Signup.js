@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Signup.css';
@@ -41,28 +41,36 @@ const Signup = () => {
       <div className="box-container text-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
         <h2>Sign Up</h2>
         <div>
-          <Form className="mt-3" onSubmit={handleSubmit}>
-            <Form.Group controlId="first_name">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter first name" onChange={handleChange} />
+          <Form className="mt-5" onSubmit={handleSubmit}>
+            <Form.Group controlId="first_name" as={Row} className="mb-3">
+              <Form.Label column md="4">First Name</Form.Label>
+              <Col md="8">
+                <Form.Control type="text" placeholder="Enter first name" onChange={handleChange} />
+              </Col>
             </Form.Group>
 
-            <Form.Group controlId="last_name">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter last name" onChange={handleChange} />
+            <Form.Group controlId="last_name" as={Row} className="mb-3">
+              <Form.Label column md="4">Last Name</Form.Label>
+              <Col md="8">
+                <Form.Control type="text" placeholder="Enter last name" onChange={handleChange} />
+              </Col>
             </Form.Group>
 
-            <Form.Group controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" onChange={handleChange} />
+            <Form.Group controlId="email" as={Row} className="mb-3">
+              <Form.Label column md="4">Email address</Form.Label>
+              <Col md="8">
+                <Form.Control type="email" placeholder="Enter email" onChange={handleChange} />
+              </Col>
             </Form.Group>
 
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" onChange={handleChange} />
+            <Form.Group controlId="password" as={Row} className="mb-5">
+              <Form.Label column md="4">Password</Form.Label>
+              <Col md="8">
+                <Form.Control type="password" placeholder="Password" onChange={handleChange} />
+              </Col>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button className="btn btn-success px-5" type="submit">
               Sign Up
             </Button>
 
