@@ -2,40 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
+import "./Home.css";
 
 const OrgHome = () => {
-  const [organizations, setOrganizations] = useState([]);
-  const location = useLocation();
-
-  
+    const [organization, setOrganization] = useState();
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
 
   useEffect(() => {
-    // Fetch organizations data from an API or other data source
-    // For demonstration purposes, I'll use a static array
-    const sampleOrganizations = [
-      {
-        id: 1,
-        name: 'Organization 1',
-        email: 'org1@example.com',
-        description: 'Description for Organization 1',
-        phoneNo: '123-456-7890',
-        status: 'Active',
-      },
-      {
-        id: 2,
-        name: 'Organization 2',
-        email: 'org2@example.com',
-        description: 'Description for Organization 2',
-        phoneNo: '987-654-3210',
-        status: 'Inactive',
-      },
-    ];
-
-    setOrganizations(sampleOrganizations);
-
     const fetchUserMe = async () => {
     try {
         const accessToken = location.state?.accessToken;
+        console.log("Access token");
+        console.log(accessToken);
+
         const response = await axios.get('http://localhost:8090/v1/user/me', {
           headers: {
             Authorization: 'Bearer ' + accessToken, // Replace YOUR_ACCESS_TOKEN with the actual token
@@ -45,6 +25,21 @@ const OrgHome = () => {
 
         const user = response.data;
         console.log('user id', user?.id);
+
+        console.log('org id', user?.orgId);
+
+        const orgId = user?.orgId;
+
+        const orgResponse = await axios.get("http://localhost:8090/v1/organization/" + orgId, {
+            headers: {
+            Authorization: 'Bearer ' + accessToken, // Replace YOUR_ACCESS_TOKEN with the actual token
+            },
+        });
+
+        console.log("org response", orgResponse.data);
+        setOrganization(orgResponse.data);
+        setLoading(false);
+
         // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -56,32 +51,36 @@ const OrgHome = () => {
   }, []);
 
   return (
-    <Container className="text-center">
-      <h2>Organizations List</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Description</th>
-            <th>Phone Number</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {organizations.map((org) => (
-            <tr key={org.id}>
-              <td>{org.id}</td>
-              <td>{org.name}</td>
-              <td>{org.email}</td>
-              <td>{org.description}</td>
-              <td>{org.phoneNo}</td>
-              <td>{org.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+    <Container className="text-center home-container">
+        <div className="box-container text-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
+        <h2>Organization Details</h2>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+            <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Description</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{organization.id}</td>
+                <td>{organization.name}</td>
+                <td>{organization.email}</td>
+                <td>{organization.description}</td>
+                <td>{organization.phoneNo}</td>
+                <td>{organization.status}</td>
+              </tr>
+            </tbody>
+          </Table>
+          )}
+        </div>
     </Container>
   );
 };
