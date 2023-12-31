@@ -7,18 +7,18 @@ import "./Home.css";
 const OrgHome = () => {
     const [organization, setOrganization] = useState();
     const location = useLocation();
+    const [accessToken, setAccessToken] = useState();
     const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserMe = async () => {
     try {
         const accessToken = location.state?.accessToken;
-        console.log("Access token");
-        console.log(accessToken);
+        setAccessToken(accessToken);
 
         const response = await axios.get('http://localhost:8090/v1/user/me', {
           headers: {
-            Authorization: 'Bearer ' + accessToken, // Replace YOUR_ACCESS_TOKEN with the actual token
+            Authorization: 'Bearer ' + accessToken,
           },
         });
         console.log('User data:', response.data);
@@ -33,7 +33,7 @@ const OrgHome = () => {
         if(orgId) {
             const orgResponse = await axios.get("http://localhost:8090/v1/organization/" + orgId, {
                 headers: {
-                Authorization: 'Bearer ' + accessToken, // Replace YOUR_ACCESS_TOKEN with the actual token
+                Authorization: 'Bearer ' + accessToken,
                 },
             });
     
@@ -41,10 +41,8 @@ const OrgHome = () => {
             setOrganization(orgResponse.data);
         }
 
-        // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching user data:', error);
-        // Handle errors
       }
     }
 
@@ -53,7 +51,7 @@ const OrgHome = () => {
 
   const handleCreateOrganization = () => {
     // Navigate to the create organization page
-    navigate('/organization/create');
+    navigate('/organization/create', {state: { accessToken: accessToken}});
   };
 
   return (

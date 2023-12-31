@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import "./Home.css";
+import axios from "axios";
 
 const Org = () => {
+  const location = useLocation();
+  const accessToken = location.state?.accessToken;
   const [orgInfo, setOrgInfo] = useState({
     name: '',
     email: '',
     description: '',
-    phoneNo: '',
+    phone_no: '',
     status: '',
+    userId: ''
   });
 
   const handleChange = (e) => {
@@ -19,9 +24,29 @@ const Org = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your logic to handle form submission
+    try {
+        const response = await axios.get('http://localhost:8090/v1/user/me', {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        });
+        const user = response.data;
+        orgInfo.userId = user?.id;
+
+        const orgResponse = await axios.post('http://localhost:8090/v1/organization/create', orgInfo, {
+            headers: {
+                Authorization: 'Bearer ' + accessToken,
+            },
+        });
+
+        console.log('Organization created:', orgResponse.data);
+      } catch (error) {
+        console.error('Error creating organization:', error);
+      }
+
+
     console.log(orgInfo);
   };
 
@@ -45,9 +70,9 @@ const Org = () => {
             <Form.Control as="textarea" rows={3} placeholder="Enter organization description" name="description" value={orgInfo.description} onChange={handleChange} required />
           </Form.Group>
 
-          <Form.Group controlId="phoneNo">
+          <Form.Group controlId="phone_no">
             <Form.Label>Phone Number</Form.Label>
-            <Form.Control type="tel" placeholder="Enter phone number" name="phoneNo" value={orgInfo.phoneNo} onChange={handleChange} required />
+            <Form.Control type="tel" placeholder="Enter phone number" name="phone_no" value={orgInfo.phone_no} onChange={handleChange} required />
           </Form.Group>
 
           <Form.Group controlId="status">
