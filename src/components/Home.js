@@ -1,25 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import "./Home.css";
+import 'bootstrap/dist/css/bootstrap.css';
 
 const Home = () => {
   return (
-    <Container className="text-center home-container">
-      <div className="box-container text-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
-        <h2>Welcome to the Home Page!</h2>
-        <div className="mt-3 d-flex justify-content-center">
-          <Link to="/signup">
-            <Button variant="primary">Sign Up</Button>
+    // <Container className="text-center home-container justify-content-center align-items-center"> 
+    //   <div className="text-center justify-content-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
+    //     <h2 className="text-center mx-auto">Lead Management System</h2>
+    //     <div className="col-md-12">
+    //         <Link to="/signup">
+    //           <Button className="buttons col-md-6">Sign Up</Button>
+    //         </Link>
+    //         <Link to="/login">
+    //           <Button className="buttons col-md-6">
+    //             Login
+    //           </Button>
+    //         </Link>
+    //     </div>
+    //   </div>
+    // </Container>
+
+    <div className="d-flex align-items-center justify-content-center text-center min-vh-100">
+      <div className="mx-auto border border-1 border-secondary rounded p-4 w-50">
+        <h2>Lead Management System</h2>
+        <p>The Lead Management System provides businesses with an efficient platform to streamline and organize their 
+          leads, offering a centralized space for comprehensive lead management, fostering enhanced organization and 
+          productivity.</p>
+        <div className="row text-center justify-content-center">
+          <Link to="/signup" className="col-md-4">
+            <Button className="px-5 btn btn-success">Sign Up</Button>
           </Link>
-          <Link to="/login">
-            <Button variant="success" className="ml-3">
-              Login
-            </Button>
+          <Link to="/login" className="col-md-4">
+            <Button className="px-5 btn btn-success">Login</Button>
           </Link>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 
