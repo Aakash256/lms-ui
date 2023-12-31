@@ -6,22 +6,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 const Home = () => {
   return (
-    // <Container className="text-center home-container justify-content-center align-items-center"> 
-    //   <div className="text-center justify-content-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
-    //     <h2 className="text-center mx-auto">Lead Management System</h2>
-    //     <div className="col-md-12">
-    //         <Link to="/signup">
-    //           <Button className="buttons col-md-6">Sign Up</Button>
-    //         </Link>
-    //         <Link to="/login">
-    //           <Button className="buttons col-md-6">
-    //             Login
-    //           </Button>
-    //         </Link>
-    //     </div>
-    //   </div>
-    // </Container>
-
     <div className="d-flex align-items-center justify-content-center text-center min-vh-100">
       <div className="mx-auto border border-1 border-secondary rounded p-4 w-50">
         <h2>Lead Management System</h2>
