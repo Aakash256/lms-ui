@@ -60,7 +60,7 @@ const OrgHome = () => {
     try {
       // Make API request to update organization data
       await axios.put(
-        'http://localhost:8090/v1/organization/' + organization.id,
+        'http://localhost:8090/v1/organization/update',
         editedOrganization,
         {
           headers: {
@@ -147,8 +147,8 @@ const OrgHome = () => {
                   <Form.Control
                     type="tel"
                     placeholder="Enter organization phone number"
-                    value={editedOrganization.phoneNo}
-                    onChange={(e) => handleFieldChange('phoneNo', e.target.value)}
+                    value={editedOrganization.phone_no}
+                    onChange={(e) => handleFieldChange('phone_no', e.target.value)}
                   />
                 </Col>
               </Form.Group>
