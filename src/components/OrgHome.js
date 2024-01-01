@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Form, Row, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import "./Home.css";
+import './Home.css';
 
 const OrgHome = () => {
-    const [organization, setOrganization] = useState();
-    const location = useLocation();
-    const [accessToken, setAccessToken] = useState();
-    const navigate = useNavigate();
+  const [organization, setOrganization] = useState();
+  const [editedOrganization, setEditedOrganization] = useState();
+  const [accessToken, setAccessToken] = useState();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserMe = async () => {
-    try {
+      try {
         const accessToken = location.state?.accessToken;
         setAccessToken(accessToken);
 
@@ -21,71 +22,162 @@ const OrgHome = () => {
             Authorization: 'Bearer ' + accessToken,
           },
         });
-        console.log('User data:', response.data);
 
         const user = response.data;
-        console.log('user id', user?.id);
-
-        console.log('org id', user?.orgId);
-
         const orgId = user?.orgId;
 
-        if(orgId) {
-            const orgResponse = await axios.get("http://localhost:8090/v1/organization/" + orgId, {
-                headers: {
+        if (orgId) {
+          const orgResponse = await axios.get(
+            'http://localhost:8090/v1/organization/' + orgId,
+            {
+              headers: {
                 Authorization: 'Bearer ' + accessToken,
-                },
-            });
-    
-            console.log("org response", orgResponse.data);
-            setOrganization(orgResponse.data);
-        }
+              },
+            }
+          );
 
+          setOrganization(orgResponse.data);
+          setEditedOrganization({ ...orgResponse.data });
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
-    }
+    };
 
     fetchUserMe();
   }, []);
 
   const handleCreateOrganization = () => {
     // Navigate to the create organization page
-    navigate('/organization/create', {state: { accessToken: accessToken}});
+    navigate('/organization/create', { state: { accessToken: accessToken } });
+  };
+
+  const handleFieldChange = (field, value) => {
+    setEditedOrganization((prevOrg) => ({ ...prevOrg, [field]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      // Make API request to update organization data
+      await axios.put(
+        'http://localhost:8090/v1/organization/' + organization.id,
+        editedOrganization,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }
+      );
+
+      // Reload organization data after update
+      const orgResponse = await axios.get(
+        'http://localhost:8090/v1/organization/' + organization.id,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }
+      );
+
+      setOrganization(orgResponse.data);
+      setEditedOrganization({ ...orgResponse.data });
+    } catch (error) {
+      console.error('Error updating organization data:', error);
+    }
   };
 
   return (
     <Container className="text-center home-container">
-      <div className="box-container text-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
-        <h2>Organization Details</h2>
+      <div
+        className="box-container text-center"
+        style={{
+          border: '1px solid #ccc',
+          borderRadius: '10px',
+          padding: '20px',
+          maxWidth: '600px',
+          width: '100%',
+        }}
+      >
+        <h2 className="mb-5">Organization Details</h2>
         {organization ? (
           <div>
-            <div>
-              <strong>ID:</strong> {organization.id}
-            </div>
-            <div>
-              <strong>Name:</strong> {organization.name}
-            </div>
-            <div>
-              <strong>Email:</strong> {organization.email}
-            </div>
-            <div>
-              <strong>Description:</strong> {organization.description}
-            </div>
-            <div>
-              <strong>Phone Number:</strong> {organization.phoneNo}
-            </div>
-            <div>
-              <strong>Status:</strong> {organization.status}
-            </div>
-            </div>
-        ): 
-            (
-              <Button variant="primary" onClick={handleCreateOrganization}>
-                Create Organization
+            <Form>
+              <Form.Group controlId="formOrgName" as={Row} className="mb-3">
+                <Form.Label column md="4">Name:</Form.Label>
+                <Col md="8">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter organization name"
+                    value={editedOrganization.name}
+                    onChange={(e) => handleFieldChange('name', e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group controlId="formOrgEmail" as={Row} className="mb-3">
+                <Form.Label column md="4">Email:</Form.Label>
+                <Col md="8">
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter organization email"
+                    value={editedOrganization.email}
+                    onChange={(e) => handleFieldChange('email', e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group controlId="formOrgDescription" as={Row} className="mb-3">
+                <Form.Label column md="4">Description:</Form.Label>
+                <Col md="8">
+                  <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="Enter organization description"
+                        value={editedOrganization.description}
+                        onChange={(e) =>
+                          handleFieldChange('description', e.target.value)
+                        }
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group controlId="formOrgPhoneNo" as={Row} className="mb-3">
+                <Form.Label column md="4">Phone Number:</Form.Label>
+                <Col md="8">
+                  <Form.Control
+                    type="tel"
+                    placeholder="Enter organization phone number"
+                    value={editedOrganization.phoneNo}
+                    onChange={(e) => handleFieldChange('phoneNo', e.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group controlId="formOrgStatus" as={Row} className="mb-5">
+                <Form.Label column md="4">Status:</Form.Label>
+                <Col md="8">
+                  <Form.Control
+                    as="select"
+                    value={editedOrganization.status}
+                    onChange={(e) => handleFieldChange('status', e.target.value)}>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    {/* Add other status options as needed */}
+                  </Form.Control>
+                </Col>
+              </Form.Group>
+
+              <Button className="btn btn-success px-5" onClick={handleSaveChanges}>
+                Save Changes
               </Button>
-            )}
+            </Form>
           </div>
+        ) : (
+          <Button className="btn btn-success px-5" onClick={handleCreateOrganization}>
+            Create Organization
+          </Button>
+        )}
+      </div>
     </Container>
   );
 };
