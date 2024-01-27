@@ -38,7 +38,7 @@ const Signup = () => {
 
   return (
     <Container className="signup-container text-center">
-      <div className="box-container text-center" style={{ border: '1px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '600px', width: '100%' }}>
+      <div className="box-container text-center border border-1 border-secondary rounded p-4" style={{ maxWidth: '600px', width: '100%' }}>
         <h2>Sign Up</h2>
         <div>
           <Form className="mt-5" onSubmit={handleSubmit}>
