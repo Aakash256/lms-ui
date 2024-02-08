@@ -45,7 +45,7 @@ const OrgHome = () => {
     };
 
     fetchUserMe();
-  }, []);
+  }, [location.state?.accessToken]);
 
   const handleCreateOrganization = () => {
     // Navigate to the create organization page
