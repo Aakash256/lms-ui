@@ -1,0 +1,20 @@
+.signup-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .box-container {
+    padding: 20px;
+  }
+
+  .form-label {
+    text-align: left !important;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}
